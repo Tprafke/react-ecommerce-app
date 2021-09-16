@@ -5,6 +5,7 @@ import ShopPage from "./pages/shop/shop.component";
 import NavBar from "./components/navbar/navbar.component";
 import SignInAndRegister from "./pages/sign-in-and-register/sign-in-and-register.component";
 import { auth } from "./firebase/firebaseService";
+import { onAuthStateChanged } from "firebase/auth";
 
 import React from "react";
 
@@ -20,7 +21,7 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {});
+    this.unsubscribeFromAuth = onAuthStateChanged(auth, (user) => {});
   }
 
   componentWillUnmount() {

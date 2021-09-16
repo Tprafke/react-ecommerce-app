@@ -1,6 +1,6 @@
 import { firebaseApp } from "./firebase";
-import { setUserProfileData } from "./firestoreService";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { createUserProfileDocument } from "./firestoreService";
 
 export const auth = getAuth(firebaseApp);
 
@@ -11,10 +11,10 @@ export async function socialLogin(selectedProvider) {
   }
   try {
     const result = await signInWithPopup(auth, provider);
-    console.log(result);
     if (result._tokenResponse.isNewUser) {
-      await setUserProfileData(result.user);
+      await createUserProfileDocument(result.user);
     }
+    console.log(result);
   } catch (error) {
     console.log(error);
   }
