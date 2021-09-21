@@ -1,7 +1,7 @@
 import React from "react";
 import CustomButton from "../custom-button/custom-button.component";
 
-import { socialLogin } from "../../firebase/firebaseService";
+import { signInWithEmail, socialLogin } from "../../firebase/firebaseService";
 
 import FormInput from "../form-input/form-input.component";
 
@@ -16,8 +16,12 @@ class SignIn extends React.Component {
       password: "",
     };
   }
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
+
+    const { email, password } = this.state;
+    signInWithEmail(email, password);
+    this.setState({ email: "", password: "" });
 
     this.setState({ email: "", password: "" });
   };

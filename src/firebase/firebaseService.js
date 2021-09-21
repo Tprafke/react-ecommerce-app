@@ -5,6 +5,7 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
   updateProfile,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { createUserProfileDocument } from "./firestoreService";
 
@@ -20,7 +21,6 @@ export async function socialLogin(selectedProvider) {
     if (result._tokenResponse.isNewUser) {
       await createUserProfileDocument(result.user);
     }
-    console.log(result);
   } catch (error) {
     console.log(error);
   }
@@ -35,5 +35,13 @@ export async function registerInFirebase(email, password, displayName) {
     return await createUserProfileDocument(result.user);
   } catch (error) {
     throw error;
+  }
+}
+
+export async function signInWithEmail(email, password) {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    console.log(error.message);
   }
 }

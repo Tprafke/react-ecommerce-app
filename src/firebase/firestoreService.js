@@ -23,7 +23,7 @@ export async function getUserDocumentRef(userAuth, additionalData) {
   if (!userAuth) return;
 
   const docRef = doc(db, "users", userAuth.uid);
-  console.log(docRef);
+
   const docSnap = await getDoc(docRef);
   if (!docSnap.exists()) {
     const { displayName, email } = userAuth;
