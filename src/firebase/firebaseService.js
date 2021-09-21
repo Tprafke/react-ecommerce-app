@@ -26,15 +26,11 @@ export async function socialLogin(selectedProvider) {
   }
 }
 
-export async function registerInFirebase(creds) {
+export async function registerInFirebase(email, password, displayName) {
   try {
-    const result = await createUserWithEmailAndPassword(
-      auth,
-      creds.email,
-      creds.password
-    );
+    const result = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(result.user, {
-      displayName: creds.displayName,
+      displayName: displayName,
     });
     return await createUserProfileDocument(result.user);
   } catch (error) {

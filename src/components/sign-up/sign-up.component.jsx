@@ -11,12 +11,14 @@ class SignUp extends React.Component {
   constructor() {
     super();
 
-    this.state = {
+    const initialState = {
       displayName: "",
       email: "",
       password: "",
       confirmPassword: "",
     };
+
+    this.state = initialState;
   }
 
   handleSubmit = async (event) => {
@@ -31,12 +33,7 @@ class SignUp extends React.Component {
 
     registerInFirebase(email, password, displayName);
 
-    this.setState({
-      displayName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+    this.setState(this.initialState);
   };
 
   handleChange = (event) => {

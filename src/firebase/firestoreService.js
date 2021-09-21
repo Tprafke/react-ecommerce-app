@@ -1,5 +1,11 @@
 import { firebaseApp } from "./firebase";
-import { getFirestore, doc, setDoc, serverTimestamp } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  serverTimestamp,
+  getDoc,
+} from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
 
@@ -13,8 +19,32 @@ export function createUserProfileDocument(user) {
   });
 }
 
+export async function getUserDocumentRef(userAuth, additionalData) {
+  if (!userAuth) return;
+
+  const docRef = doc(db, "users", userAuth.uid);
+  console.log(docRef);
+  const docSnap = await getDoc(docRef);
+  if (!docSnap.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = serverTimestamp();
+    try {
+      await setDoc(docRef, {
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      });
+    } catch (error) {
+      console.log("Error creating user", error.message);
+    }
+  }
+
+  return docRef;
+}
+
 export function dataFromSnapshot(snapshot) {
-  if (!snapshot.exists) return undefined;
+  if (!snapshot.exists()) return undefined;
   const data = snapshot.data();
 
   for (const prop in data) {

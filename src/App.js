@@ -5,9 +5,10 @@ import ShopPage from "./pages/shop/shop.component";
 import NavBar from "./components/navbar/navbar.component";
 import SignInAndRegister from "./pages/sign-in-and-register/sign-in-and-register.component";
 import { auth } from "./firebase/firebaseService";
-import { onAuthStateChanged } from "firebase/auth";
+import { onSnapshot } from "@firebase/firestore";
 
 import React from "react";
+import { getUserDocumentRef } from "./firebase/firestoreService";
 
 class App extends React.Component {
   constructor() {
@@ -21,9 +22,20 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    this.unsubscribeFromAuth = onAuthStateChanged(auth, (userAuth) => {
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
-        
+        const userRef = await getUserDocumentRef(userAuth);
+
+        onSnapshot(userRef, (snapshot) => {
+          this.setState({
+            currentUser: {
+              id: snapshot.id,
+              ...snapshot.data(),
+            },
+          });
+        });
+      } else {
+        this.setState({ currentUser: userAuth });
       }
     });
   }
