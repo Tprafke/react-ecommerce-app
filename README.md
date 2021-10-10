@@ -1,4 +1,6 @@
-# React-Ecommerce-App
+# React-Ecommerce-App (FireSale)
+
+### [Live Site](tprafke-fire-sale.herokuapp.com/)
 
 
 ## Languages & Technologies
