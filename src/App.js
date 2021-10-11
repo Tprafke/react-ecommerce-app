@@ -12,16 +12,20 @@ import CheckoutPage from "./pages/checkout/checkout.component";
 
 import { auth } from "./firebase/firebaseService";
 import { onSnapshot } from "@firebase/firestore";
-import { getUserDocumentRef } from "./firebase/firestoreService";
+import {
+  getUserDocumentRef,
+  addCollectionAndDocuments,
+} from "./firebase/firestoreService";
 
 import { setCurrentUser } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selectors";
+import { selectCollectionsForPreview } from "./redux/shop/shop.selectors";
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser, collectionsArray } = this.props;
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
@@ -36,6 +40,7 @@ class App extends React.Component {
       } else {
         setCurrentUser(userAuth);
       }
+      // await addCollectionAndDocuments("collections", collectionsArray);
     });
   }
 
@@ -70,6 +75,7 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  collectionsArray: selectCollectionsForPreview,
 });
 
 const mapDispatchToProps = (dispatch) => ({

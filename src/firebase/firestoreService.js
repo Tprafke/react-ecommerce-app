@@ -5,6 +5,8 @@ import {
   setDoc,
   serverTimestamp,
   getDoc,
+  collection,
+  writeBatch,
 } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
@@ -42,6 +44,20 @@ export async function getUserDocumentRef(userAuth, additionalData) {
 
   return docRef;
 }
+
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const batch = writeBatch(db);
+
+  objectsToAdd.forEach((obj) => {
+    const newDocRef = doc(collection(db, collectionKey));
+    console.log(newDocRef);
+    batch.set(newDocRef, obj);
+  });
+  return await batch.commit();
+};
 
 export function dataFromSnapshot(snapshot) {
   if (!snapshot.exists()) return undefined;
