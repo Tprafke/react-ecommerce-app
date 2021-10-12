@@ -12,10 +12,7 @@ import CheckoutPage from "./pages/checkout/checkout.component";
 
 import { auth } from "./firebase/firebaseService";
 import { onSnapshot } from "@firebase/firestore";
-import {
-  getUserDocumentRef,
-  addCollectionAndDocuments,
-} from "./firebase/firestoreService";
+import { getUserDocumentRef } from "./firebase/firestoreService";
 
 import { setCurrentUser } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selectors";
@@ -25,7 +22,7 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser, collectionsArray } = this.props;
+    const { setCurrentUser } = this.props;
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
@@ -40,7 +37,6 @@ class App extends React.Component {
       } else {
         setCurrentUser(userAuth);
       }
-      // await addCollectionAndDocuments("collections", collectionsArray);
     });
   }
 

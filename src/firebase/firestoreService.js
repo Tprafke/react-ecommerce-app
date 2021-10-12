@@ -7,6 +7,8 @@ import {
   getDoc,
   collection,
   writeBatch,
+  getDocs,
+  onSnapshot,
 } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
@@ -45,6 +47,29 @@ export async function getUserDocumentRef(userAuth, additionalData) {
   return docRef;
 }
 
+export async function getCollectionRef(collectionKey) {
+  const collectionRef = collection(db, collectionKey);
+  return collectionRef;
+}
+
+export function dataFromSnapshot(snapshot) {
+  const newCollection = snapshot.docs.map((doc) => {
+    const { title, items } = doc.data();
+
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+
+  return newCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {});
+}
+
 export const addCollectionAndDocuments = async (
   collectionKey,
   objectsToAdd
@@ -58,21 +83,3 @@ export const addCollectionAndDocuments = async (
   });
   return await batch.commit();
 };
-
-export function dataFromSnapshot(snapshot) {
-  if (!snapshot.exists()) return undefined;
-  const data = snapshot.data();
-
-  for (const prop in data) {
-    if (data.hasOwnProperty(prop)) {
-      if (data[prop] instanceof serverTimestamp()) {
-        data[prop] = data[prop].toDate();
-      }
-    }
-  }
-
-  return {
-    ...data,
-    id: snapshot.id,
-  };
-}
