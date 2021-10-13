@@ -7,8 +7,6 @@ import {
   getDoc,
   collection,
   writeBatch,
-  getDocs,
-  onSnapshot,
 } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
