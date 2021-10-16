@@ -3,12 +3,13 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
-import "./App.css";
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import NavBar from "./components/navbar/navbar.component";
 import SignInAndRegister from "./pages/sign-in-and-register/sign-in-and-register.component";
 import CheckoutPage from "./pages/checkout/checkout.component";
+
+import { GlobalStyle } from "./global.styles";
 
 import { auth } from "./firebase/firebaseService";
 import { onSnapshot } from "@firebase/firestore";
@@ -47,6 +48,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <GlobalStyle />
         <NavBar />
         <Switch>
           <Route exact path='/' component={HomePage} />
